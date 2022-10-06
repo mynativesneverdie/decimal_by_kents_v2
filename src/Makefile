@@ -1,4 +1,4 @@
-RC_DIR := ./
+SRC_DIR := ./
 TEST_SRC_DIR := ./test/
 
 LIB_SRC = $(shell find $(SRC_DIR) -maxdepth 1 -name 's21*.c')
@@ -35,37 +35,29 @@ COV := gcovr
 
 all: s21_decimal.a clean test
 
-test: $(TEST_OBJ) main.o $(LIB_OBJ)
-	$(CC) $(TEST_OBJ) main.o $(LIB_OBJ) $(TEST_LFLAGS) -o s21_decimal
-#	./lint.sh
-#	./s21_decimal
-#ifeq ($(OS), Linux)
-#	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./s21_decimal
-#else
-#	leaks -atExit -- ./s21_decimal | grep LEAK:
-#endif
-
 $(LIB_OBJ): %.o: %.c
 	$(CC) $(TEST_CFLAGS) -g $< -o $@
 
 $(TEST_OBJ): %.o: %.c
 	$(CC) $(CFLAGS) -g $< -o $@
 
-main.o: main.c
-	$(CC) $(CFLAGS) -g $< -o $@
-
-gcov_report:
-	./s21_decimal
-	-@mkdir ./html_report
-	$(COV) -r . --html --html-details -o ./html_report/coverage_report.html
-
-open:
-	open ./html_report/coverage_report.html
+test: $(TEST_OBJ) main.o $(LIB_OBJ)
+	$(CC) $(TEST_OBJ) main.o $(LIB_OBJ) $(TEST_LFLAGS) -o s21_decimal
 
 s21_decimal.a:
 	$(CC) $(LIB_CFLAGS) $(LIB_SRC)
 	ar rc s21_decimal.a $(LIB_OBJ)
 	ranlib s21_decimal.a
+
+main.o: main.c
+	$(CC) $(CFLAGS) -g $< -o $@
+
+gcov_report:
+	-@mkdir ./html_report
+	$(COV) -r . --html --html-details -o ./html_report/coverage_report.html
+
+open:
+	open ./html_report/coverage_report.html
 
 check_clang:
 	@cp ../materials/linters/.clang-format ./.clang-format
@@ -74,6 +66,13 @@ check_clang:
 	@clang-format -n *.c *.h
 	@clang-format -n $(TEST_DIR)*.c $(TEST_DIR)*.h
 	@rm .clang-format
+
+check_leaks:
+ifeq ($(OS), Linux)
+	valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all -s ./s21_decimal
+else
+	leaks -atExit -- ./s21_decimal | grep LEAK:
+endif
 
 clean:
 	rm -rf *.o a.out \

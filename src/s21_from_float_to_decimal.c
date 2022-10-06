@@ -68,9 +68,8 @@ int s21_from_float_to_decimal(float src, s21_decimal *dst) {
     memcpy(float_num, &whole, sizeof(whole));
     memcpy(&whole, float_num, sizeof(float_num));
 
-    int float_exp = (float_num[2] & 0x80)
-                        ? ((float_num[3] << 1) | 0x01) - 127
-                        : (float_num[3] << 1) - 127;
+    int float_exp = (float_num[2] & 0x80) ? ((float_num[3] << 1) | 0x01) - 127
+                                          : (float_num[3] << 1) - 127;
 
     if (float_exp > 0) {
       int tmp_float_exp = float_exp;
@@ -84,8 +83,7 @@ int s21_from_float_to_decimal(float src, s21_decimal *dst) {
       }
     }
 
-    for (int i = 0; i < exp; i++)
-      s21_mul(*dst, EXP_BASE, dst);
+    for (int i = 0; i < exp; i++) s21_mul(*dst, EXP_BASE, dst);
     dst->bits[0] += frac_part;
     dst->bits[3] |= exp << 16;
   }

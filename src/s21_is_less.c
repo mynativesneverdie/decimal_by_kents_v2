@@ -13,7 +13,7 @@ int s21_is_less(s21_decimal value_1, s21_decimal value_2) {
   if ((s21_is_equal(value_1, value_2) && exp1 == exp2) || (!sign1 && sign2)) {
     result = 0;
   } else if (sign1 && !sign2) {
-      result = 1;
+    result = 1;
   } else if (sign1 == sign2) {
     for (int i = 95; i >= 0; i--) {
       int bit1 = get_bit_c(value_1, i);

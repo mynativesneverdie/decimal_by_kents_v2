@@ -38,8 +38,7 @@ void _head_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result,
         min_exp == 0 || *exp >= 28)
       break;
 
-    if (is_mul_overflow(*result, EXP_BASE))
-      break;
+    if (is_mul_overflow(*result, EXP_BASE)) break;
 
     s21_mul(value_1, EXP_BASE, &value_1);
     s21_mul(*result, EXP_BASE, result);
@@ -98,21 +97,21 @@ int _align_div_mantises(s21_decimal *value_1, s21_decimal *value_2,
 }
 
 void _increase_dividend(s21_decimal *value_1, s21_decimal *value_2, int *exp) {
-    // TODO: check if max number !!! {
-    int additional_exp = 0;
-    while (*exp > 0) {
-      s21_mul(*value_1, EXP_BASE, value_1);
-      s21_mul(*value_2, EXP_BASE, value_2);
-      (*exp)--;
-    }
+  // TODO: check if max number !!! {
+  int additional_exp = 0;
+  while (*exp > 0) {
+    s21_mul(*value_1, EXP_BASE, value_1);
+    s21_mul(*value_2, EXP_BASE, value_2);
+    (*exp)--;
+  }
 
-    while (is_gr(*value_2, *value_1)) {
-      s21_mul(*value_1, EXP_BASE, value_1);
-      additional_exp++;
-    }
-    // }
+  while (is_gr(*value_2, *value_1)) {
+    s21_mul(*value_1, EXP_BASE, value_1);
+    additional_exp++;
+  }
+  // }
 
-    *exp += additional_exp;
+  *exp += additional_exp;
 }
 
 int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
@@ -131,7 +130,7 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
   int exp = ((exp_1 > exp_2) ? exp_1 : exp_2);
 
   res = _align_div_mantises(&value_1, &value_2, result, diff, &exp);
-    
+
   if (are_mantisses_eq(value_2, DECIMAL_ZERO)) {
     res = DIV_BY_ZERO;
     *result = DECIMAL_ZERO;
@@ -139,7 +138,7 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     *result = DECIMAL_ZERO;
     exp = 0;
   } else if (are_mantisses_eq(value_2, DECIMAL_MAX) &&
-            are_mantisses_eq(value_1, DECIMAL_MAX)) {
+             are_mantisses_eq(value_1, DECIMAL_MAX)) {
     *result = DECIMAL_ONE;
   } else if (are_mantisses_eq(value_2, DECIMAL_MAX)) {
     *result = DECIMAL_ZERO;
@@ -149,7 +148,7 @@ int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     _head_div(value_1, value_2, result, &exp);
   }
 
-  if (res == OK_STATUS) { 
+  if (res == OK_STATUS) {
     result->bits[3] |= exp << 16;
     if ((sign_1 && !sign_2) || (!sign_1 && sign_2)) {
       result->bits[3] |= SIGN_DECIMAL_MASK;

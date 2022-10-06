@@ -1,5 +1,6 @@
-#include "s21_decimal.h"
 #include <stdio.h>
+
+#include "s21_decimal.h"
 
 void _head_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
   s21_decimal temp = DECIMAL_ONE;
@@ -13,10 +14,10 @@ void _head_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     left_shift(&value_2);
     left_shift(&temp);
   }
-  
+
   while (is_gr(temp, DECIMAL_ONE)) {
     if (overflow) {
-        overflow = 0;
+      overflow = 0;
     } else {
       right_shift(&temp);
       right_shift(&value_2);
@@ -78,7 +79,6 @@ int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
   int diff = exp_1 - exp_2;
   int exp = ((exp_1 > exp_2) ? exp_1 : exp_2);
 
-
   _align_mod_mantises(&value_1, &value_2, diff);
 
   if (are_mantisses_eq(value_2, DECIMAL_ZERO)) {
@@ -87,7 +87,7 @@ int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
   } else if (are_mantisses_eq(value_1, DECIMAL_ZERO)) {
     *result = DECIMAL_ZERO;
   } else if (are_mantisses_eq(value_2, DECIMAL_MAX) &&
-            are_mantisses_eq(value_1, DECIMAL_MAX)) {
+             are_mantisses_eq(value_1, DECIMAL_MAX)) {
     *result = DECIMAL_ZERO;
   } else if (are_mantisses_eq(value_2, DECIMAL_MAX)) {
     *result = DECIMAL_ZERO;
@@ -96,7 +96,7 @@ int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     _head_mod(value_1, value_2, result);
   }
 
-  if (res == OK_STATUS) { 
+  if (res == OK_STATUS) {
     result->bits[3] |= exp << 16;
     if (!(!sign_1 && !sign_2)) {
       result->bits[3] |= SIGN_DECIMAL_MASK;

@@ -2,7 +2,7 @@
 
 ```c
 typedef struct {
-  unsigned int bits[4];
+unsigned int bits[4];
 } s21_decimal;
 ```
 
@@ -60,5 +60,5 @@ typedef struct {
 | Возвращает результат умножения указанного Decimal на -1. | int s21_negate(s21_decimal value, s21_decimal *result)   |
 
 Возвращаемое значение - код ошибки:
-- 0 - OK
-- 1 - ошибка вычисления
+ - 0 - OK
+ - 1 - ошибка вычисления

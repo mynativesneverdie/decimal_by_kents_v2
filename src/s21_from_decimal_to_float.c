@@ -3,7 +3,7 @@
 int s21_from_decimal_to_float(s21_decimal src, float *dst) {
   int ret = 0;
 
- if (!is_correct_decimal(src)) {
+  if (!is_correct_decimal(src)) {
     ret = 1;
     *dst = 0.0;
   } else {
