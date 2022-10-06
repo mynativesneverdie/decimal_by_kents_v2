@@ -1,4 +1,4 @@
-# Decimal_C_by_kents
+# Decimal_C
 
 ```c
 typedef struct {
