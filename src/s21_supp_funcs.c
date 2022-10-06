@@ -67,7 +67,6 @@ int is_gr(s21_decimal value_1, s21_decimal value_2) {
   return res;
 }
 
-
 int are_mantisses_eq(s21_decimal value_1, s21_decimal value_2) {
   int res = 1;
 
@@ -93,7 +92,6 @@ void right_shift(s21_decimal *value) {
   }
 }
 
-
 int left_shift(s21_decimal *value) {
   int res = 0;
 
@@ -113,7 +111,6 @@ int left_shift(s21_decimal *value) {
 
   return res;
 }
-
 
 void left_float_shift(uint8_t *value) {
   value[MANTISSA_BYTE_NUM - 1] <<= 1U;
@@ -148,8 +145,7 @@ int is_mul_overflow(s21_decimal value_1, s21_decimal value_2) {
   return res;
 }
 
-
-int s21_add_simple(s21_decimal dec1, s21_decimal dec2, s21_decimal* result) {
+int s21_add_simple(s21_decimal dec1, s21_decimal dec2, s21_decimal *result) {
   initial_val(result);
   int rank = 0;
   for (int i = 0; i < 96; i++) {
@@ -164,7 +160,7 @@ int s21_add_simple(s21_decimal dec1, s21_decimal dec2, s21_decimal* result) {
   return rank;
 }
 
-void s21_sub_simple(s21_decimal dec1, s21_decimal dec2, s21_decimal* result) {
+void s21_sub_simple(s21_decimal dec1, s21_decimal dec2, s21_decimal *result) {
   initial_val(result);
   for (int i = 0; i < 96; i++) {
     int bit_dec1 = get_bit(dec1, i);
@@ -184,7 +180,7 @@ void s21_sub_simple(s21_decimal dec1, s21_decimal dec2, s21_decimal* result) {
 }
 
 s21_decimal s21_div_simple(s21_decimal dec1, s21_decimal dec2,
-                           s21_decimal* result) {
+                           s21_decimal *result) {
   if (result) initial_val(result);
   s21_decimal fmod = {0};
   s21_decimal temp = {0};
@@ -263,7 +259,6 @@ void s21_round_tmp(s21_decimal value, s21_decimal *result) {
   }
 }
 
-
 void max_decimal(s21_decimal *value) {
   value->bits[0] = UINT_MAX;
   value->bits[1] = UINT_MAX;
@@ -292,7 +287,6 @@ void initial_val(s21_decimal *value) {
     set_bit(value, i, 0);
   }
 }
-
 
 int get_bit_c(s21_decimal num, int curBit) {
   int bit;

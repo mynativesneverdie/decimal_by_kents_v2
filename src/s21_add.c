@@ -89,7 +89,6 @@ int _align_add_mantises(s21_decimal *value_1, s21_decimal *value_2, int exp_1,
 
 void _make_add_rounding(s21_decimal *value_1, s21_decimal *value_2, int sign_1,
                         int sign_2, int *exp_1, int *exp_2) {
-
   int lim_exp_1 = limit_exp(*value_1, *exp_1);
   int lim_exp_2 = limit_exp(*value_2, *exp_2);
 
@@ -133,8 +132,7 @@ int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
   res = _head_add(value_1, value_2, result, sign_1, sign_2);
 
   result->bits[3] |= ((exp_1 > exp_2) ? exp_1 : exp_2) << 16;
-  if (inv)
-    *result = inv_value(*result);
+  if (inv) *result = inv_value(*result);
 
   return res;
 }

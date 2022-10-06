@@ -1,8 +1,9 @@
-#include "s21_decimal.h"
 #include <stdio.h>
 
+#include "s21_decimal.h"
+
 int _head_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result,
-              int sign_1, int sign_2, int * exp_1, int *exp_2) {
+              int sign_1, int sign_2, int *exp_1, int *exp_2) {
   int res = OK_STATUS;
   int exp = *exp_1 + *exp_2;
   int exit = 0;
@@ -63,16 +64,14 @@ int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
       are_mantisses_eq(value_1, DECIMAL_ZERO)) {
     *result = DECIMAL_ZERO;
   } else if (are_mantisses_eq(value_2, DECIMAL_MAX) &&
-            is_gr(value_1, DECIMAL_ONE) && 
-            (exp_1 == 0 && exp_2 == 0)) {
+             is_gr(value_1, DECIMAL_ONE) && (exp_1 == 0 && exp_2 == 0)) {
     res = LARGE_NUM;
     *result = DECIMAL_MAX;
   } else if (are_mantisses_eq(value_1, DECIMAL_MAX) &&
-            is_gr(value_2, DECIMAL_ONE) && 
-            (exp_1 == 0 && exp_2 == 0)){
+             is_gr(value_2, DECIMAL_ONE) && (exp_1 == 0 && exp_2 == 0)) {
     res = LARGE_NUM;
     *result = DECIMAL_MAX;
-  } else {    
+  } else {
     res = _head_mul(value_1, value_2, result, sign_1, sign_2, &exp_1, &exp_2);
   }
 
@@ -84,7 +83,7 @@ int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     *result = DECIMAL_ZERO;
     res = SMALL_NUM;
   }
-  
+
   if ((sign_1 && !sign_2) || (!sign_1 && sign_2)) {
     result->bits[3] |= SIGN_DECIMAL_MASK;
   }
