@@ -1,10 +1,8 @@
 # Decimal_C_by_kents
 
-
 ```c
-typedef struct 
-{
-    unsigned int bits[4];
+typedef struct {
+  unsigned int bits[4];
 } s21_decimal;
 ```
 
