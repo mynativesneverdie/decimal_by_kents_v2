@@ -5,7 +5,7 @@ int s21_from_decimal_to_int(s21_decimal src, int *dst) {
 
   s21_decimal ten = EXP_BASE;
 
-  int sign = get_sign(&src.bits[3]);
+  int sign = get_sign(src);
   int exp = get_exp(&src.bits[3]);
 
   if (exp >= 0 && exp <= 28) {

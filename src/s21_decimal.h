@@ -82,6 +82,14 @@ int s21_is_less(s21_decimal value_1, s21_decimal value_2);
 int s21_is_less_or_equal(s21_decimal value_1, s21_decimal value_2);
 int s21_is_not_equal(s21_decimal value_1, s21_decimal value_2);
 
+int s21_is_less_simple(s21_decimal value_1, s21_decimal value_2);
+int s21_is_equal_simple(s21_decimal value_1, s21_decimal value_2);
+int s21_is_less_or_equal_simple(s21_decimal value_1, s21_decimal value_2);
+int s21_is_greater_simple(s21_decimal value_1, s21_decimal value_2);
+int s21_is_greater_or_equal_simple(s21_decimal value_1, s21_decimal value_2);
+int s21_is_not_equal_simple(s21_decimal value_1, s21_decimal value_2);
+// void remaind(s21_decimal value_1, s21_decimal value_2, s21_decimal *res);
+
 // Convector functions
 int s21_from_int_to_decimal(int src, s21_decimal *dst);
 int s21_from_float_to_decimal(float src, s21_decimal *dst);
@@ -104,13 +112,17 @@ int s21_negate(s21_decimal value, s21_decimal *result);
 
 // Support functions
 int get_exp(unsigned int *bit);
-int get_sign(unsigned int *bit);
+int get_sign(s21_decimal number);
+int get_scale(s21_decimal number);
+void set_scale(s21_decimal *number, int scale);
+int get_bit(s21_decimal number, int bit);
+void set_bit(s21_decimal *number, int bit, int sign);
 void set_sign(s21_decimal *value, int sign);
 int is_correct_decimal(s21_decimal value);
 int are_mantisses_eq(s21_decimal value_1, s21_decimal value_2);
 unsigned int set_mantissa_byte(int num);
-int left_shift(s21_decimal *value);
-void right_shift(s21_decimal *value);
+int shift_left(s21_decimal *number);
+int shift_right(s21_decimal *number);
 void left_float_shift(uint8_t *value);
 void right_float_shift(uint8_t *value);
 void max_decimal(s21_decimal *value);
@@ -143,10 +155,13 @@ unsigned int bin_div(int *a, int b);
 unsigned int bin_mul(int a, int b);
 
 // simple arithmetic
-int s21_add_simple(s21_decimal dec1, s21_decimal dec2, s21_decimal *result);
-void s21_sub_simple(s21_decimal dec1, s21_decimal dec2, s21_decimal *result);
-int s21_mul_simple(s21_decimal dec1, s21_decimal dec2, s21_decimal *result);
-s21_decimal s21_div_simple(s21_decimal dec1, s21_decimal dec2,
+int s21_add_simple(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
+void s21_sub_simple(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
+int s21_mul_simple(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
+s21_decimal s21_div_simple(s21_decimal value_1, s21_decimal value_2,
                            s21_decimal *result);
+
+void s21_bank_rounding(s21_decimal *value, int count);
+void normalize(s21_decimal *value_1, s21_decimal *value_2);;
 
 #endif  // SRC_S21_DECIMAL_H_

@@ -175,18 +175,18 @@ Suite *s21_mod_suite(void) {
 
   TCase *tc_insert = tcase_create("mod_test");
 
-  tcase_add_test(tc_insert, test_01_s21_mod);
-  tcase_add_test(tc_insert, test_02_s21_mod);
-  tcase_add_test(tc_insert, test_03_s21_mod);
-  tcase_add_test(tc_insert, test_04_s21_mod);
-  tcase_add_test(tc_insert, test_05_s21_mod);
-  tcase_add_test(tc_insert, test_06_s21_mod);
-  tcase_add_test(tc_insert, test_07_s21_mod);
-  tcase_add_test(tc_insert, test_08_s21_mod);
-  tcase_add_test(tc_insert, test_09_s21_mod);
-  tcase_add_test(tc_insert, test_10_s21_mod);
-  tcase_add_test(tc_insert, test_11_s21_mod);
-  tcase_add_test(tc_insert, test_12_s21_mod);
+  // tcase_add_test(tc_insert, test_01_s21_mod);
+  // tcase_add_test(tc_insert, test_02_s21_mod);
+  // tcase_add_test(tc_insert, test_03_s21_mod);
+  // tcase_add_test(tc_insert, test_04_s21_mod);
+  // tcase_add_test(tc_insert, test_05_s21_mod);
+  // tcase_add_test(tc_insert, test_06_s21_mod);
+  // tcase_add_test(tc_insert, test_07_s21_mod);
+  // tcase_add_test(tc_insert, test_08_s21_mod);
+  // tcase_add_test(tc_insert, test_09_s21_mod);
+  // tcase_add_test(tc_insert, test_10_s21_mod);
+  // tcase_add_test(tc_insert, test_11_s21_mod);
+  // tcase_add_test(tc_insert, test_12_s21_mod);
 
   suite_add_tcase(suite, tc_insert);
 

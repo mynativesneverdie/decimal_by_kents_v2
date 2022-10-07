@@ -77,7 +77,7 @@ int s21_from_float_to_decimal(float src, s21_decimal *dst) {
       dst->bits[0] = 1;
 
       while (tmp_float_exp--) {
-        left_shift(dst);
+        shift_left(dst);
         dst->bits[0] |= (float_num[2] & 0x80) ? 1 : 0;
         left_float_shift(float_num);
       }
