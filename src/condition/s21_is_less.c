@@ -17,13 +17,9 @@ int s21_is_less(s21_decimal value_1, s21_decimal value_2) {
     is_less = !s21_is_less_simple(value_1, value_2);
   }
   if (exp1 > exp2) {
-    if (exp1 > value_1.bits[1]) {
       is_less = switch_res(is_less);
-    }
   } else if (exp1 < exp2) {
-    if (exp2 > value_1.bits[1]) {
       is_less = 0;
-    }
   }
   return is_less;
 }

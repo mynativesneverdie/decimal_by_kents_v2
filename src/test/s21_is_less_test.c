@@ -199,7 +199,7 @@ START_TEST(s21_is_less_18) {
 END_TEST
 
 START_TEST(s21_is_less_19) {
-    s21_decimal value_1 = {{1222, 12, 676, 0x00020000,}};
+    s21_decimal value_1 = {{1222, 12, 676, 0x00020000}};
     s21_decimal value_2 = {{1222, 12, 676, 0x00010000}};
 
     int res = 1;
