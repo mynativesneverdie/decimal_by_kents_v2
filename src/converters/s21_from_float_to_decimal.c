@@ -1,92 +1,40 @@
 #include "../s21_decimal.h"
 
-void count_float_nums(float src, int *frac_int_part, int *exp, int *mantiss_num,
-                      double *whole_part) {
-  float fractional_part = modf(src, whole_part);
-  float tmp = *whole_part;
-
-  while (tmp >= 1) {
-    tmp /= 10;
-    (*mantiss_num)++;
-  }
-
-  for (int i = 0;
-       i < 7 && ((*mantiss_num) < 29) && (fractional_part * 10 < pow(2, 96));
-       i++) {
-    fractional_part *= 10;
-  }
-
-  if (((int)fractional_part) == 0) {
-    *exp = 0;
-  } else {
-    *exp = 7;
-    while ((((int)fractional_part) % 10) == 0) {
-      fractional_part /= 10;
-      (*exp)--;
-    }
-  }
-
-  if (*exp == 7) {
-    int last_num = ((int)fractional_part) % 10;
-    fractional_part /= 10;
-    *frac_int_part = (int)fractional_part;
-    if (last_num == 5) {
-      if (*frac_int_part % 2 != 0) {
-        *frac_int_part++;
-      }
-    } else if (last_num > 5) {
-      *frac_int_part++;
-    }
-
-    (*exp)--;
-  } else {
-    *frac_int_part = (int)fractional_part;
-  }
-}
-
 int s21_from_float_to_decimal(float src, s21_decimal *dst) {
-  int res = OK_STATUS;
-  *dst = DECIMAL_ZERO;
-
-  if (src < 0) {
-    src *= -1;
-    dst->bits[3] |= FBIT_UINT32_MASK;
+  memset(&(dst->bits), 0, sizeof(dst->bits));
+  //проверка, что число не NAN и не бесконечность
+  if (is_inf(src) || is_nan(src)) return 1;
+  // Получаем битовое представление float
+  int float_bits = float_2_bits(src);
+  //Проверяем знак
+  if (test_bit(float_bits, 31)) {
+    set_1_bit(&(dst->bits[3]), 31);
+    src = -src;
   }
-
-  if (!dst || is_inf(src) || src >= pow(2, 96) || (0 < src && src < 1e-28)) {
-    res = CONV_ERROR;
-  } else if (src == 0) {
-    res = OK_STATUS;
-  } else {
-    int frac_part = 0, decimal_exp = 0, exp = 0, mantiss_num = 0;
-    double whole_part = 0;
-
-    count_float_nums(src, &frac_part, &exp, &mantiss_num, &whole_part);
-    float whole = (float)whole_part;
-
-    uint8_t float_num[4];
-    memcpy(float_num, &whole, sizeof(whole));
-    memcpy(&whole, float_num, sizeof(float_num));
-
-    int float_exp = (float_num[2] & 0x80) ? ((float_num[3] << 1) | 0x01) - 127
-                                          : (float_num[3] << 1) - 127;
-
-    if (float_exp > 0) {
-      int tmp_float_exp = float_exp;
-      left_float_shift(float_num);
-      dst->bits[0] = 1;
-
-      while (tmp_float_exp--) {
-        shift_left(dst);
-        dst->bits[0] |= (float_num[2] & 0x80) ? 1 : 0;
-        left_float_shift(float_num);
-      }
-    }
-
-    for (int i = 0; i < exp; i++) s21_mul(*dst, EXP_BASE, dst);
-    dst->bits[0] += frac_part;
-    dst->bits[3] |= exp << 16;
+  //Получаем степень экспоненты из float с 30 до 23 бита
+  int exp_shift = exp_float_bin2dec(float_bits);
+  //Убираем сдвиг экспоненты
+  //Получаем десятичное значение степени, в которое нужно возвести 10
+  int exp = exp_shift - 127;
+  // printf("\n\nexp: %d\n\n", exp);
+  int error = float2decimal_main(float_bits, exp, dst);
+  //магическое отлавливание ошибки большого числа, которое не помещается в
+  //децимал
+  if (error == 123) {
+    memset(&(dst->bits), 0, sizeof(dst->bits));
+    return 1;
   }
-
-  return res;
+  //здесь отлавливаем ошибку если подано число меньше 1e-28. В этом случае dst
+  //будет нулевым (bits[0-2] == 0), а dst->bits[3] != 0 (то есть умножение
+  //происходило) => зануляем dst и возвращаем ошибку
+  if (dst->bits[0] == 0 && dst->bits[1] == 0 && dst->bits[2] == 0 &&
+      dst->bits[3] != 0 && src != 0) {
+    memset(&(dst->bits), 0, sizeof(dst->bits));
+    return 1;
+  }
+  //если src  == 0
+  if (src == 0) {
+    memset(&(dst->bits), 0, sizeof(dst->bits));
+  }
+  return 0;
 }
