@@ -1,40 +1,55 @@
 #include "../s21_decimal.h"
 
+int count_str_float(float src, char *str_src) {
+  int count_str = 0, k = 1;
+  char str[100];
+
+  snprintf(str, sizeof(str), "%f", src);
+
+  for (int i = (int)strlen(str) - 1; i >= 0; i--) {
+    if (str[i] == '0' && k == 1) {
+      str[i] = '\0';
+      continue;
+    } else {
+      k = -1;
+    }
+    if (str[i] == '.') {
+      break;
+    }
+    count_str++;
+  }
+
+  strncpy(str_src, str, strlen(str) + 1);
+
+  return count_str;
+}
+
 int s21_from_float_to_decimal(float src, s21_decimal *dst) {
-  memset(&(dst->bits), 0, sizeof(dst->bits));
-  //проверка, что число не NAN и не бесконечность
-  if (is_inf(src) || is_nan(src)) return 1;
-  // Получаем битовое представление float
-  int float_bits = float_2_bits(src);
-  //Проверяем знак
-  if (test_bit(float_bits, 31)) {
-    set_1_bit(&(dst->bits[3]), 31);
-    src = -src;
+  *dst = DECIMAL_ZERO;
+  if (fabsf(src) < 1e-28 && fabsf(src) > 0) {
+    return CONV_ERROR;
   }
-  //Получаем степень экспоненты из float с 30 до 23 бита
-  int exp_shift = exp_float_bin2dec(float_bits);
-  //Убираем сдвиг экспоненты
-  //Получаем десятичное значение степени, в которое нужно возвести 10
-  int exp = exp_shift - 127;
-  // printf("\n\nexp: %d\n\n", exp);
-  int error = float2decimal_main(float_bits, exp, dst);
-  //магическое отлавливание ошибки большого числа, которое не помещается в
-  //децимал
-  if (error == 123) {
-    memset(&(dst->bits), 0, sizeof(dst->bits));
-    return 1;
+
+  char str_src[100];
+  int count_str = count_str_float(src, str_src), is_overfull = 0;
+
+  s21_decimal ten = EXP_BASE;
+
+  for (size_t i = 0; i < strlen(str_src); i++) {
+    if (str_src[i] != '.' && str_src[i] != '-') {
+      s21_decimal add;
+      s21_from_int_to_decimal(str_src[i] - '0', &add);
+      s21_add_simple(*dst, add, dst);
+      is_overfull = s21_mul(*dst, ten, dst);
+    }
   }
-  //здесь отлавливаем ошибку если подано число меньше 1e-28. В этом случае dst
-  //будет нулевым (bits[0-2] == 0), а dst->bits[3] != 0 (то есть умножение
-  //происходило) => зануляем dst и возвращаем ошибку
-  if (dst->bits[0] == 0 && dst->bits[1] == 0 && dst->bits[2] == 0 &&
-      dst->bits[3] != 0 && src != 0) {
-    memset(&(dst->bits), 0, sizeof(dst->bits));
-    return 1;
+
+  if (!is_overfull) {
+    s21_div_simple(*dst, ten, dst);
   }
-  //если src  == 0
-  if (src == 0) {
-    memset(&(dst->bits), 0, sizeof(dst->bits));
-  }
-  return 0;
+
+  set_sign(dst, src < 0);
+  set_scale(dst, count_str);
+
+  return OK;
 }

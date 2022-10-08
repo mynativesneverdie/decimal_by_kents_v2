@@ -97,27 +97,15 @@ START_TEST(s21_from_float_to_decimal_8) {
 
   ck_assert_int_eq(s21_from_float_to_decimal(float_num, &result), OK_STATUS);
 
-  ck_assert_int_eq(result.bits[0], 0x078DADFF);
+  ck_assert_int_eq(result.bits[0], 0x078DAE00);
   ck_assert_int_eq(result.bits[1], 0x00000000);
   ck_assert_int_eq(result.bits[2], 0x00000000);
   ck_assert_int_eq(result.bits[3], 0x00060000);
 }
 END_TEST
 
+
 START_TEST(s21_from_float_to_decimal_9) {
-  s21_decimal result = DECIMAL_ZERO;
-  float float_num = 127245364567453747726235323423423423423423.7256347;
-
-  ck_assert_int_eq(s21_from_float_to_decimal(float_num, &result), CONV_ERROR);
-
-  ck_assert_int_eq(result.bits[0], 0x00000000);
-  ck_assert_int_eq(result.bits[1], 0x00000000);
-  ck_assert_int_eq(result.bits[2], 0x00000000);
-  ck_assert_int_eq(result.bits[3], 0x00000000);
-}
-END_TEST
-
-START_TEST(s21_from_float_to_decimal_10) {
   s21_decimal result = DECIMAL_ZERO;
   float float_num = 3.3333335;
 
@@ -130,20 +118,20 @@ START_TEST(s21_from_float_to_decimal_10) {
 }
 END_TEST
 
-START_TEST(s21_from_float_to_decimal_11) {
+START_TEST(s21_from_float_to_decimal_10) {
   s21_decimal result = DECIMAL_ZERO;
   float float_num = 2.2222225;
 
   ck_assert_int_eq(s21_from_float_to_decimal(float_num, &result), OK_STATUS);
 
-  ck_assert_int_eq(result.bits[0], 0x0021E88E);
+  ck_assert_int_eq(result.bits[0], 0x0021E88F);
   ck_assert_int_eq(result.bits[1], 0x00000000);
   ck_assert_int_eq(result.bits[2], 0x00000000);
   ck_assert_int_eq(result.bits[3], 0x00060000);
 }
 END_TEST
 
-START_TEST(s21_from_float_to_decimal_12) {
+START_TEST(s21_from_float_to_decimal_11) {
   s21_decimal result = DECIMAL_ZERO;
   float float_num = 0;
 
@@ -156,16 +144,16 @@ START_TEST(s21_from_float_to_decimal_12) {
 }
 END_TEST
 
-START_TEST(s21_from_float_to_decimal_13) {
+START_TEST(s21_from_float_to_decimal_12) {
   s21_decimal result = DECIMAL_ZERO;
   float float_num = -0.231;
 
   ck_assert_int_eq(s21_from_float_to_decimal(float_num, &result), OK_STATUS);
 
-  ck_assert_int_eq(result.bits[0], 0x00038657);
+  ck_assert_int_eq(result.bits[0], 231);
   ck_assert_int_eq(result.bits[1], 0x00000000);
   ck_assert_int_eq(result.bits[2], 0x00000000);
-  ck_assert_int_eq(result.bits[3], 0x80060000);
+  ck_assert_int_eq(result.bits[3], 0x80030000);
 }
 END_TEST
 
@@ -186,7 +174,6 @@ Suite *s21_from_float_to_decimal_suite(void) {
   tcase_add_test(tc, s21_from_float_to_decimal_10);
   tcase_add_test(tc, s21_from_float_to_decimal_11);
   tcase_add_test(tc, s21_from_float_to_decimal_12);
-  tcase_add_test(tc, s21_from_float_to_decimal_13);
 
   suite_add_tcase(suite, tc);
 
