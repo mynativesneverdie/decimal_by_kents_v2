@@ -40,8 +40,10 @@ int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
   if (!(sign_1 ^ sign_2)) {
     is_overfull = s21_add_simple(value_1, value_2, result);
     set_sign(result, sign_1);
+
     if (is_overfull && sign_1 && sign_2) {
       is_overfull = SMALL_NUM;
+      *result = DECIMAL_ZERO;
     }
   } else if (s21_is_less_or_equal_simple(value_1, value_2)) {
     s21_sub_simple(value_2, value_1, result);

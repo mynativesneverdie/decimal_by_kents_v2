@@ -28,7 +28,7 @@ END_TEST
 
 START_TEST(test_03_s21_from_int_to_decimal) {
   s21_decimal result = DECIMAL_ZERO;
-  int int_num = 0xFFFFFFFFFFFFFFFFFF;
+  long unsigned int int_num = 0xFFFFFFFFFFFFFFFFFF;
 
   ck_assert_int_eq(s21_from_int_to_decimal(int_num, &result), OK_STATUS);
 //   printf("%08X %08X%08X%08X\n", result.bits[3], result.bits[2],
