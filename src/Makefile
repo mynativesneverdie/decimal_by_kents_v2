@@ -1,5 +1,4 @@
 SRC_DIR := ./
-SIMPLE_SRC_DIR := ./simple_funcs/
 ARITHMETIC_DIR := ./arithmetic/
 CONDITION_DIR := ./condition/
 CONVERTERS_DIR := ./converters/
@@ -7,7 +6,6 @@ ANOTHER_DIR := ./another_funcs/
 TEST_SRC_DIR := ./test/
 
 LIB_SRC = $(shell find $(SRC_DIR) -maxdepth 1 -name 's21*.c')
-LIB_SRC += $(shell find $(SIMPLE_SRC_DIR) -maxdepth 1 -name 's21*.c')
 LIB_SRC += $(shell find $(ARITHMETIC_DIR) -maxdepth 1 -name 's21*.c')
 LIB_SRC += $(shell find $(CONDITION_DIR) -maxdepth 1 -name 's21*.c')
 LIB_SRC += $(shell find $(CONVERTERS_DIR) -maxdepth 1 -name 's21*.c')
