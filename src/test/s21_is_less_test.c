@@ -210,7 +210,7 @@ START_TEST(s21_is_less_19) {
 END_TEST
 
 START_TEST(s21_is_less_20) {
-    s21_decimal value_1 = {{1222, 12, 676, 0x000A0000,}};
+    s21_decimal value_1 = {{1222, 12, 676, 0x000A0000}};
     s21_decimal value_2 = {{1222, 0, 0, 0x00020000}};
 
     int res = 0;
@@ -221,7 +221,7 @@ START_TEST(s21_is_less_20) {
 END_TEST
 
 START_TEST(s21_is_less_21) {
-    s21_decimal value_1 = {{1222, 12, 676, 0x00120000,}};
+    s21_decimal value_1 = {{1222, 12, 676, 0x00120000}};
     s21_decimal value_2 = {{1222, 0, 0, 0x00020000}};
     
     int res = 1;
@@ -232,7 +232,7 @@ START_TEST(s21_is_less_21) {
 END_TEST
 
 START_TEST(s21_is_less_22) {
-    s21_decimal value_1 = {{1222, 0, 0, 0x00020000,}};
+    s21_decimal value_1 = {{1222, 0, 0, 0x00020000}};
     s21_decimal value_2 = {{1222, 12, 676, 0x00120000}};
     
     int res = 0;
