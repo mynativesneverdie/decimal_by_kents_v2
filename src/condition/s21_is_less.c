@@ -1,26 +1,29 @@
 #include "../s21_decimal.h"
 
-int s21_is_less(s21_decimal value_1, s21_decimal value_2) {
-  int is_less;
-  int sign_1 = get_sign(value_1);
-  int sign_2 = get_sign(value_2);
-  int exp1 = get_exp(&value_1.bits[3]);
-  int exp2 = get_exp(&value_2.bits[3]);
-  
-  if (!sign_1 && !sign_2) {
-    normalize(&value_1, &value_2);
-    is_less = s21_is_less_simple(value_1, value_2);
-  } else if (sign_1 ^ sign_2) {
-    is_less = (sign_1) ? 1 : 0;
+int stupid_less(s21_decimal value_1, s21_decimal value_2) {
+  int res = 0;
+  for (int i = 96 - 1; i >= 0; i--) {
+    if (get_bit(value_1, i) == get_bit(value_2, i))
+      continue;
+    else if (get_bit(value_1, i) < get_bit(value_2, i))
+      res = 1;
+    break;
+  }
+  return res;
+}
+
+int s21_is_less(s21_decimal a, s21_decimal b) {
+  int res = false;
+  if (is_zero(a) && is_zero(b)) return res;
+
+  if (get_sign(a) != get_sign(b)) {
+    res = get_sign(a);
   } else {
-    normalize(&value_1, &value_2);
-    is_less = !s21_is_less_simple(value_1, value_2);
+    normalize(&a, &b);
+    res = stupid_less(a, b);
+    if (get_sign(a)) res ^= 1;
   }
-  if (exp1 > exp2) {
-      is_less = switch_res(is_less);
-  } else if (exp1 < exp2) {
-      is_less = 0;
-  }
-  return is_less;
+
+  return res;
 }
 

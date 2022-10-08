@@ -1,4 +1,4 @@
-#include "./s21_decimal.h"
+#include "../s21_decimal.h"
 
 void count_float_nums(float src, int *frac_int_part, int *exp, int *mantiss_num,
                       double *whole_part) {

@@ -224,7 +224,7 @@ START_TEST(s21_is_less_21) {
     s21_decimal value_1 = {{1222, 12, 676, 0x00120000}};
     s21_decimal value_2 = {{1222, 0, 0, 0x00020000}};
     
-    int res = 1;
+    int res = 0;
     int res1 = s21_is_less(value_1, value_2);
 
     ck_assert_int_eq(res, res1);
@@ -235,7 +235,7 @@ START_TEST(s21_is_less_22) {
     s21_decimal value_1 = {{1222, 0, 0, 0x00020000}};
     s21_decimal value_2 = {{1222, 12, 676, 0x00120000}};
     
-    int res = 0;
+    int res = 1;
     int res1 = s21_is_less(value_1, value_2);
 
     ck_assert_int_eq(res, res1);
