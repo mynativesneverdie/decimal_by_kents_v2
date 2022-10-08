@@ -16,7 +16,5 @@ int s21_is_equal(s21_decimal value_1, s21_decimal value_2) {
     normalize(&value_1, &value_2);
     is_equal = s21_is_equal_simple(value_1, value_2);
   }
-
-  printf("\n");
   return is_equal;
 }
