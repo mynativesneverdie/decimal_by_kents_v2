@@ -99,6 +99,17 @@ START_TEST(test_09_s21_add) {
 }
 END_TEST
 
+START_TEST(test_10_s21_add) {
+  s21_decimal a = {{0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00090000}},
+              b = {{0x23423423, 0xFFFFFFFF, 0xFFFFFFFF, 0x00090000}},
+              c = {{0x1D20386A, 0x33333333, 0x33333333, 0x00080000}},
+              res = DECIMAL_ZERO;
+
+  ck_assert_int_eq(s21_add(a, b, &res), OK);
+  ck_assert_int_eq(s21_is_equal(res, c), 1);
+}
+END_TEST
+
 Suite *s21_add_suite(void) {
   Suite *suite = suite_create("ADD test");
 
@@ -113,6 +124,7 @@ Suite *s21_add_suite(void) {
   tcase_add_test(tc_insert, test_07_s21_add);
   tcase_add_test(tc_insert, test_08_s21_add);
   tcase_add_test(tc_insert, test_09_s21_add);
+  tcase_add_test(tc_insert, test_10_s21_add);
 
   suite_add_tcase(suite, tc_insert);
 

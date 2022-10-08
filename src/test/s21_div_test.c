@@ -1,9 +1,9 @@
 #include "s21_tests_suite.h"
 
 START_TEST(test_01_s21_div) {
-  s21_decimal a = {{3, 0, 0, 0x00000000}},
+  s21_decimal a = {{1444, 0, 0, 0x00000000}},
               b = {{2, 0, 0, 0x00000000}},
-              c = {{0x0000000F, 0, 0, 0x00010000}},
+              c = {{0x000002D2, 0x00000000, 0x00000000, 0x00000000}},
               res = DECIMAL_ZERO;
 
   ck_assert_int_eq(s21_div(a, b, &res), OK);
