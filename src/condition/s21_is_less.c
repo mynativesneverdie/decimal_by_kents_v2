@@ -25,6 +25,7 @@ int s21_is_less(s21_decimal value_1, s21_decimal value_2) {
       is_less = 0;
     }
   }
+  // ?????
   return is_less;
 }
 
