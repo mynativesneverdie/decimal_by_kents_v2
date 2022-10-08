@@ -9,8 +9,6 @@ int get_exp(unsigned int *bit) {
   return new_bit;
 }
 
-
-
 int get_sign(s21_decimal number) {
   int sign = 1;
 
@@ -128,13 +126,15 @@ int is_mul_overflow(s21_decimal value_1, s21_decimal value_2) {
 
 //     set_bit(result, i, bit_dec1 ^ bit_dec2 ^ rank);
 
-//     rank = (bit_dec1 && bit_dec2) || (bit_dec1 && rank) || (bit_dec2 && rank);
+//     rank = (bit_dec1 && bit_dec2) || (bit_dec1 && rank) || (bit_dec2 &&
+//     rank);
 //   }
 
 //   return rank;
 // }
 
-// void s21_sub_simple(s21_decimal dec1, s21_decimal dec2, s21_decimal *result) {
+// void s21_sub_simple(s21_decimal dec1, s21_decimal dec2, s21_decimal *result)
+// {
 //   initial_val(result);
 //   for (int i = 0; i < 96; i++) {
 //     int bit_dec1 = get_bit(dec1, i);

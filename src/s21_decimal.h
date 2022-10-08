@@ -155,13 +155,17 @@ unsigned int bin_div(int *a, int b);
 unsigned int bin_mul(int a, int b);
 
 // simple arithmetic
-int s21_add_simple(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
-void s21_sub_simple(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
-int s21_mul_simple(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
+int s21_add_simple(s21_decimal value_1, s21_decimal value_2,
+                   s21_decimal *result);
+void s21_sub_simple(s21_decimal value_1, s21_decimal value_2,
+                    s21_decimal *result);
+int s21_mul_simple(s21_decimal value_1, s21_decimal value_2,
+                   s21_decimal *result);
 s21_decimal s21_div_simple(s21_decimal value_1, s21_decimal value_2,
                            s21_decimal *result);
 
 void s21_bank_rounding(s21_decimal *value, int count);
-void normalize(s21_decimal *value_1, s21_decimal *value_2);;
+void normalize(s21_decimal *value_1, s21_decimal *value_2);
+;
 
 #endif  // SRC_S21_DECIMAL_H_

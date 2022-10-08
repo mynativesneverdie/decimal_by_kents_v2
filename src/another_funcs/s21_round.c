@@ -1,4 +1,4 @@
-#include "s21_decimal.h"
+#include "../s21_decimal.h"
 
 int s21_round(s21_decimal value, s21_decimal *result) {
   s21_decimal base = EXP_BASE, mul = DECIMAL_ZERO, one = DECIMAL_ONE;

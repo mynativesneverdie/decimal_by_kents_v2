@@ -1,4 +1,4 @@
-#include "s21_decimal.h"
+#include "../s21_decimal.h"
 
 int s21_floor(s21_decimal value, s21_decimal *result) {
   int sign = get_sign(value);
