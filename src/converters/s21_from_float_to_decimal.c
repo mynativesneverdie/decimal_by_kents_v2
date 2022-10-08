@@ -1,92 +1,56 @@
 #include "../s21_decimal.h"
 
-void count_float_nums(float src, int *frac_int_part, int *exp, int *mantiss_num,
-                      double *whole_part) {
-  float fractional_part = modf(src, whole_part);
-  float tmp = *whole_part;
+int count_str_float(float src, char *str_src) {
+  int count_str = 0, k = 1;
+  char str[100];
 
-  while (tmp >= 1) {
-    tmp /= 10;
-    (*mantiss_num)++;
-  }
+  snprintf(str, sizeof(str), "%f", src);
 
-  for (int i = 0;
-       i < 7 && ((*mantiss_num) < 29) && (fractional_part * 10 < pow(2, 96));
-       i++) {
-    fractional_part *= 10;
-  }
-
-  if (((int)fractional_part) == 0) {
-    *exp = 0;
-  } else {
-    *exp = 7;
-    while ((((int)fractional_part) % 10) == 0) {
-      fractional_part /= 10;
-      (*exp)--;
+  for (int i = (int)strlen(str) - 1; i >= 0; i--) {
+    if (str[i] == '0' && k == 1) {
+      str[i] = '\0';
+      continue;
+    } else {
+      k = -1;
     }
-  }
-
-  if (*exp == 7) {
-    int last_num = ((int)fractional_part) % 10;
-    fractional_part /= 10;
-    *frac_int_part = (int)fractional_part;
-    if (last_num == 5) {
-      if (*frac_int_part % 2 != 0) {
-        *frac_int_part++;
-      }
-    } else if (last_num > 5) {
-      *frac_int_part++;
+    if (str[i] == '.') {
+      break;
     }
-
-    (*exp)--;
-  } else {
-    *frac_int_part = (int)fractional_part;
+    count_str++;
   }
+
+  strncpy(str_src, str, strlen(str) + 1);
+
+  return count_str;
 }
 
 int s21_from_float_to_decimal(float src, s21_decimal *dst) {
-  int res = OK_STATUS;
   *dst = DECIMAL_ZERO;
-
-  if (src < 0) {
-    src *= -1;
-    dst->bits[3] |= FBIT_UINT32_MASK;
+  if (fabsf(src) < 1e-28 && fabsf(src) > 0) {
+    return CONV_ERROR;
   }
 
-  if (!dst || is_inf(src) || src >= pow(2, 96) || (0 < src && src < 1e-28)) {
-    res = CONV_ERROR;
-  } else if (src == 0) {
-    res = OK_STATUS;
-  } else {
-    int frac_part = 0, decimal_exp = 0, exp = 0, mantiss_num = 0;
-    double whole_part = 0;
+  char str_src[100];
+  int count_str = count_str_float(src, str_src), is_overfull = 0;
 
-    count_float_nums(src, &frac_part, &exp, &mantiss_num, &whole_part);
-    float whole = (float)whole_part;
+  s21_decimal ten;
+  s21_from_int_to_decimal(10, &ten);
 
-    uint8_t float_num[4];
-    memcpy(float_num, &whole, sizeof(whole));
-    memcpy(&whole, float_num, sizeof(float_num));
-
-    int float_exp = (float_num[2] & 0x80) ? ((float_num[3] << 1) | 0x01) - 127
-                                          : (float_num[3] << 1) - 127;
-
-    if (float_exp > 0) {
-      int tmp_float_exp = float_exp;
-      left_float_shift(float_num);
-      dst->bits[0] = 1;
-
-      while (tmp_float_exp--) {
-        shift_left(dst);
-        dst->bits[0] |= (float_num[2] & 0x80) ? 1 : 0;
-        left_float_shift(float_num);
-      }
+  for (size_t i = 0; i < strlen(str_src); i++) {
+    if (str_src[i] != '.' && str_src[i] != '-') {
+      s21_decimal add;
+      s21_from_int_to_decimal(str_src[i] - '0', &add);
+      s21_add_simple(*dst, add, dst);
+      is_overfull = s21_mul(*dst, ten, dst);
     }
-
-    for (int i = 0; i < exp; i++) s21_mul(*dst, EXP_BASE, dst);
-    dst->bits[0] += frac_part;
-    dst->bits[3] |= exp << 16;
   }
 
-  return res;
+  if (!is_overfull) {
+    s21_div_simple(*dst, ten, dst);
+  }
+
+  set_sign(dst, src < 0);
+  set_scale(dst, count_str);
+
+  return OK;
 }
