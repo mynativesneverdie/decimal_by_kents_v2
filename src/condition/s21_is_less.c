@@ -1,19 +1,16 @@
 #include "../s21_decimal.h"
 
-int s21_is_less(s21_decimal value_1, s21_decimal value_2) {
-  int is_less;
-  int sign_1 = get_sign(value_1);
-  int sign_2 = get_sign(value_2);
+int s21_is_less(s21_decimal a, s21_decimal b) {
+  int res = false;
+  if (is_zero(a) && is_zero(b)) return res;
 
-  if (!sign_1 && !sign_2) {
-    normalize(&value_1, &value_2);
-    is_less = s21_is_less_simple(value_1, value_2);
-  } else if (sign_1 ^ sign_2) {
-    is_less = (sign_1) ? 1 : 0;
+  if (get_sign(a) != get_sign(b)) {
+    res = get_sign(a);
   } else {
-    normalize(&value_1, &value_2);
-    is_less = !s21_is_less_simple(value_1, value_2);
+    normalize(&a, &b);
+    res = s21_is_less_simple(a, b);
+    if (get_sign(a)) res ^= 1;
   }
 
-  return is_less;
+  return res;
 }

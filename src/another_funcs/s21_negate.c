@@ -1,6 +1,6 @@
 #include "../s21_decimal.h"
 
-int s21_negate(s21_decimal value_1, s21_decimal* result) {
+int s21_negate(s21_decimal value_1, s21_decimal *result) {
   int ret = 0;
   if (!result) {
     ret = 1;

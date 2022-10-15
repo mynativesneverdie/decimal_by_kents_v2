@@ -1,5 +1,4 @@
 SRC_DIR := ./
-SIMPLE_SRC_DIR := ./simple_funcs/
 ARITHMETIC_DIR := ./arithmetic/
 CONDITION_DIR := ./condition/
 CONVERTERS_DIR := ./converters/
@@ -7,7 +6,6 @@ ANOTHER_DIR := ./another_funcs/
 TEST_SRC_DIR := ./test/
 
 LIB_SRC = $(shell find $(SRC_DIR) -maxdepth 1 -name 's21*.c')
-LIB_SRC += $(shell find $(SIMPLE_SRC_DIR) -maxdepth 1 -name 's21*.c')
 LIB_SRC += $(shell find $(ARITHMETIC_DIR) -maxdepth 1 -name 's21*.c')
 LIB_SRC += $(shell find $(CONDITION_DIR) -maxdepth 1 -name 's21*.c')
 LIB_SRC += $(shell find $(CONVERTERS_DIR) -maxdepth 1 -name 's21*.c')
@@ -77,8 +75,16 @@ check_clang:
 	@cp ../materials/linters/.clang-format ./.clang-format
 #	@clang-format -i *.c *.h
 #	@clang-format -i $(TEST_DIR)*.c $(TEST_DIR)*.h
+#	@clang-format -i $(ARITHMETIC_DIR)*.c
+#	@clang-format -i $(CONDITION_DIR)*.c
+#	@clang-format -i $(CONVERTERS_DIR)*.c
+#	@clang-format -i $(ANOTHER_DIR)*.c
 	@clang-format -n *.c *.h
 	@clang-format -n $(TEST_DIR)*.c $(TEST_DIR)*.h
+	@clang-format -n $(ARITHMETIC_DIR)*.c
+	@clang-format -n $(CONDITION_DIR)*.c
+	@clang-format -n $(CONVERTERS_DIR)*.c
+	@clang-format -n $(ANOTHER_DIR)*.c
 	@rm .clang-format
 
 check_leaks:
@@ -87,6 +93,11 @@ ifeq ($(OS), Linux)
 else
 	leaks -atExit -- ./s21_decimal | grep LEAK:
 endif
+
+push:
+	git add .
+	git commit -m "$(DATE)"
+	git push origin develop
 
 clean:
 	rm -rf *.o a.out \

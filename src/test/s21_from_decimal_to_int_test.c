@@ -27,7 +27,6 @@ START_TEST(test_03_s21_from_decimal_to_int) {
 }
 END_TEST
 
-
 START_TEST(test_04_s21_from_decimal_to_int) {
   s21_decimal src = {{0x2312, 0x00, 0x00, 0x80020000}};
   int dst = 0;
@@ -99,7 +98,6 @@ START_TEST(test_11_s21_from_decimal_to_int) {
   ck_assert_int_eq(dst, 7);
 }
 END_TEST
-
 
 START_TEST(test_12_s21_from_decimal_to_int) {
   s21_decimal src = {{UINT_MAX, UINT_MAX, UINT_MAX, 0x00C10000}};
