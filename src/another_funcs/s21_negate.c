@@ -1,6 +1,6 @@
-#include "s21_decimal.h"
+#include "../s21_decimal.h"
 
-int s21_negate(s21_decimal value_1, s21_decimal* result) {
+int s21_negate(s21_decimal value_1, s21_decimal *result) {
   int ret = 0;
   if (!result) {
     ret = 1;
@@ -8,7 +8,7 @@ int s21_negate(s21_decimal value_1, s21_decimal* result) {
     ret = 1;
   } else {
     *result = value_1;
-    int sign = get_sign(&value_1.bits[3]);
+    int sign = get_sign(value_1);
 
     if (sign)
       sign = 0;

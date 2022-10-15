@@ -25,6 +25,7 @@
 #define START_MID 32
 #define START_HIGH 64
 #define START_INFO 96
+#define NUM_255 255
 
 #define OVERFLOW_FLAG (1U << 0U)
 
@@ -37,6 +38,11 @@ enum errors {
   SMALL_NUM = 2,
   DIV_BY_ZERO = 3
 };
+
+typedef union {
+  float flt;
+  unsigned int bits;
+} lens_t;
 
 enum bits { LOW = 0, MIDDLE = 1, HIGH = 2, SCALE = 3 };
 
@@ -82,6 +88,14 @@ int s21_is_less(s21_decimal value_1, s21_decimal value_2);
 int s21_is_less_or_equal(s21_decimal value_1, s21_decimal value_2);
 int s21_is_not_equal(s21_decimal value_1, s21_decimal value_2);
 
+int s21_is_less_simple(s21_decimal value_1, s21_decimal value_2);
+int s21_is_equal_simple(s21_decimal value_1, s21_decimal value_2);
+int s21_is_less_or_equal_simple(s21_decimal value_1, s21_decimal value_2);
+int s21_is_greater_simple(s21_decimal value_1, s21_decimal value_2);
+int s21_is_greater_or_equal_simple(s21_decimal value_1, s21_decimal value_2);
+int s21_is_not_equal_simple(s21_decimal value_1, s21_decimal value_2);
+// void remaind(s21_decimal value_1, s21_decimal value_2, s21_decimal *res);
+
 // Convector functions
 int s21_from_int_to_decimal(int src, s21_decimal *dst);
 int s21_from_float_to_decimal(float src, s21_decimal *dst);
@@ -103,14 +117,33 @@ int s21_truncate(s21_decimal value, s21_decimal *result);
 int s21_negate(s21_decimal value, s21_decimal *result);
 
 // Support functions
+int float_2_bits(float src);
+void exp_less_0(int *all_bits_float, int *count_10, int exp, s21_decimal *dst);
+int exp_float_bin2dec(int bits);
+int float2decimal_main(int float_bits, int exp, s21_decimal *dst);
+void exp_less_23(int *all_bits_float, int *count_10, int integer_bits,
+                 int fractional_bits, s21_decimal *dst, int index_less_0);
+void count10_to_bin(int *count_10, int *count_10_bit);
+int exp_more_23(int *all_bits_float, int exp, s21_decimal *dst);
+int test_bit(unsigned int value, int BitNumber);
+void set_0_bit(unsigned int *value, int BitNumber);
+void set_1_bit(unsigned int *value, int BitNumber);
+void write_float_decimal_exp_less(int *bits_copy, s21_decimal *dst, int index,
+                                  int bit);
+void write_float_decimal_exp_more(int *result, s21_decimal *dst, int index,
+                                  int bit);
 int get_exp(unsigned int *bit);
-int get_sign(unsigned int *bit);
+int get_sign(s21_decimal number);
+int get_scale(s21_decimal number);
+void set_scale(s21_decimal *number, int scale);
+int get_bit(s21_decimal number, int bit);
+void set_bit(s21_decimal *number, int bit, int sign);
 void set_sign(s21_decimal *value, int sign);
 int is_correct_decimal(s21_decimal value);
 int are_mantisses_eq(s21_decimal value_1, s21_decimal value_2);
 unsigned int set_mantissa_byte(int num);
-int left_shift(s21_decimal *value);
-void right_shift(s21_decimal *value);
+int shift_left(s21_decimal *number);
+int shift_right(s21_decimal *number);
 void left_float_shift(uint8_t *value);
 void right_float_shift(uint8_t *value);
 void max_decimal(s21_decimal *value);
@@ -143,10 +176,17 @@ unsigned int bin_div(int *a, int b);
 unsigned int bin_mul(int a, int b);
 
 // simple arithmetic
-int s21_add_simple(s21_decimal dec1, s21_decimal dec2, s21_decimal *result);
-void s21_sub_simple(s21_decimal dec1, s21_decimal dec2, s21_decimal *result);
-int s21_mul_simple(s21_decimal dec1, s21_decimal dec2, s21_decimal *result);
-s21_decimal s21_div_simple(s21_decimal dec1, s21_decimal dec2,
+int s21_add_simple(s21_decimal value_1, s21_decimal value_2,
+                   s21_decimal *result);
+void s21_sub_simple(s21_decimal value_1, s21_decimal value_2,
+                    s21_decimal *result);
+int s21_mul_simple(s21_decimal value_1, s21_decimal value_2,
+                   s21_decimal *result);
+s21_decimal s21_div_simple(s21_decimal value_1, s21_decimal value_2,
                            s21_decimal *result);
+
+void s21_bank_rounding(s21_decimal *value, int count);
+void normalize(s21_decimal *value_1, s21_decimal *value_2);
+;
 
 #endif  // SRC_S21_DECIMAL_H_

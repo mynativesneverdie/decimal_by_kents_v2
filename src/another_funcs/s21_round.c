@@ -1,10 +1,10 @@
-#include "s21_decimal.h"
+#include "../s21_decimal.h"
 
 int s21_round(s21_decimal value, s21_decimal *result) {
   s21_decimal base = EXP_BASE, mul = DECIMAL_ZERO, one = DECIMAL_ONE;
   s21_truncate(value, result);
 
-  int sign = get_sign(&value.bits[3]);
+  int sign = get_sign(value);
   int exp = get_exp(&value.bits[3]);
 
   if (exp) exp--;

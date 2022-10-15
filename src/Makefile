@@ -1,10 +1,20 @@
 SRC_DIR := ./
+ARITHMETIC_DIR := ./arithmetic/
+CONDITION_DIR := ./condition/
+CONVERTERS_DIR := ./converters/
+ANOTHER_DIR := ./another_funcs/
 TEST_SRC_DIR := ./test/
 
 LIB_SRC = $(shell find $(SRC_DIR) -maxdepth 1 -name 's21*.c')
+LIB_SRC += $(shell find $(ARITHMETIC_DIR) -maxdepth 1 -name 's21*.c')
+LIB_SRC += $(shell find $(CONDITION_DIR) -maxdepth 1 -name 's21*.c')
+LIB_SRC += $(shell find $(CONVERTERS_DIR) -maxdepth 1 -name 's21*.c')
+LIB_SRC += $(shell find $(ANOTHER_DIR) -maxdepth 1 -name 's21*.c')
+
 LIB_OBJ := $(LIB_SRC:.c=.o)
 
 TEST_SRC = $(shell find $(TEST_SRC_DIR) -maxdepth 1 -name 's21*.c')
+
 TEST_OBJ := $(TEST_SRC:.c=.o)
 OS := $(shell uname -s)
 
@@ -46,7 +56,7 @@ test: $(TEST_OBJ) main.o $(LIB_OBJ)
 
 s21_decimal.a:
 	$(CC) $(LIB_CFLAGS) $(LIB_SRC)
-	ar rc s21_decimal.a $(LIB_OBJ)
+	ar rc s21_decimal.a *.o
 	ranlib s21_decimal.a
 
 main.o: main.c
@@ -59,12 +69,22 @@ gcov_report:
 open:
 	open ./html_report/coverage_report.html
 
+check: check_clang check_leaks
+
 check_clang:
 	@cp ../materials/linters/.clang-format ./.clang-format
 #	@clang-format -i *.c *.h
 #	@clang-format -i $(TEST_DIR)*.c $(TEST_DIR)*.h
+#	@clang-format -i $(ARITHMETIC_DIR)*.c
+#	@clang-format -i $(CONDITION_DIR)*.c
+#	@clang-format -i $(CONVERTERS_DIR)*.c
+#	@clang-format -i $(ANOTHER_DIR)*.c
 	@clang-format -n *.c *.h
 	@clang-format -n $(TEST_DIR)*.c $(TEST_DIR)*.h
+	@clang-format -n $(ARITHMETIC_DIR)*.c
+	@clang-format -n $(CONDITION_DIR)*.c
+	@clang-format -n $(CONVERTERS_DIR)*.c
+	@clang-format -n $(ANOTHER_DIR)*.c
 	@rm .clang-format
 
 check_leaks:
@@ -74,21 +94,29 @@ else
 	leaks -atExit -- ./s21_decimal | grep LEAK:
 endif
 
+push:
+	git add .
+	git commit -m "$(DATE)"
+	git push origin develop
+
 clean:
 	rm -rf *.o a.out \
 	./html_report/   \
+	./**/*.gcno      \
+	./**/*.gcda 	 \
 	*.gcno           \
 	*.gcda           \
-	*.a              \
-	./test/*.o       \
+	./**/*.a         \
+	./**/*.o         \
 	./test/*.gcda    \
 	./test/*.gcno    \
 	./log.txt        \
+	s21_decimal.a    \
 	s21_decimal
 
-.PHONY: all          \
-		clean        \
-		test         \
-		s21_decimal.a   \
+.PHONY: all           \
+		clean         \
+		test          \
+		s21_decimal.a \
 		gcov_report
 

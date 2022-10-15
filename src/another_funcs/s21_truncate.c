@@ -1,10 +1,10 @@
-#include "s21_decimal.h"
+#include "../s21_decimal.h"
 
 int s21_truncate(s21_decimal value, s21_decimal *result) {
   int ret = 0;
   int sign, exp;
 
-  sign = get_sign(&value.bits[3]);
+  sign = get_sign(value);
   exp = get_exp(&value.bits[3]);
 
   if (!is_correct_decimal(value)) {

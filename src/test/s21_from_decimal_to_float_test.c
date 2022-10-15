@@ -71,7 +71,7 @@ START_TEST(s21_from_decimal_to_float_5) {
 END_TEST
 
 START_TEST(s21_from_decimal_to_float_6) {
-  s21_decimal src = {{1234, 123123,123132, 0x1D0000}};
+  s21_decimal src = {{1234, 123123, 123132, 0x1D0000}};
   int result;
   float number = 1.2;
   result = s21_from_decimal_to_float(src, &number);
@@ -82,7 +82,7 @@ END_TEST
 Suite *s21_from_decimal_to_float_suite(void) {
   Suite *suite = suite_create("FROM_DECIMAL_TO_FLOAT test");
 
-  TCase *tc= tcase_create("from_decimal_to_float_test");
+  TCase *tc = tcase_create("from_decimal_to_float_test");
 
   tcase_add_test(tc, s21_from_decimal_to_float_1);
   tcase_add_test(tc, s21_from_decimal_to_float_2);

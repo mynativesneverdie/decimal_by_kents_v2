@@ -1,4 +1,4 @@
-#include "s21_decimal.h"
+#include "../s21_decimal.h"
 
 int s21_from_decimal_to_float(s21_decimal src, float *dst) {
   int ret = 0;
@@ -9,7 +9,7 @@ int s21_from_decimal_to_float(s21_decimal src, float *dst) {
   } else {
     *dst = 0.0;
     double tmp = 0.00000000;
-    int sign = get_sign(&src.bits[3]);
+    int sign = get_sign(src);
     int exp = get_exp(&src.bits[3]);
 
     for (int i = 0; i < 96; i++) {
